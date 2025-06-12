@@ -1,14 +1,18 @@
+
 import { cn } from "@/lib/utils";
+import React from 'react';
 
 interface SectionTitleProps {
   title: string;
   className?: string;
+  id?: string;
+  as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 }
 
-export function SectionTitle({ title, className }: SectionTitleProps) {
+export function SectionTitle({ title, className, id, as: Component = 'h2' }: SectionTitleProps) {
   return (
-    <h2 className={cn("text-3xl font-bold tracking-tight text-foreground mb-6 font-headline", className)}>
+    <Component id={id} className={cn("text-3xl font-bold tracking-tight text-foreground mb-6 font-headline", className)}>
       {title}
-    </h2>
+    </Component>
   );
 }

@@ -28,6 +28,12 @@ const nextConfig: NextConfig = {
         hostname: 'site.web.api.espn.com', // Added for potential images from the new tennis API
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'iili.io', // Added for new sports category icons
+        port: '',
+        pathname: '/**',
       }
     ],
   },

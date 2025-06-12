@@ -3,10 +3,10 @@ import type { MetadataRoute } from 'next';
 import { sportCategories } from '@/lib/sports-data'; // Using the simple list for URLs
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://sportsurge.dev'; // Fallback ensures a value
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.sportsurge1.com'; // Fallback ensures a value
 
   const categoryPages = sportCategories.map((category) => ({
-    url: `${siteUrl}/category/${category.id}`,
+    url: `${siteUrl}/${category.id}`, // Updated URL structure
     lastModified: new Date(),
     changeFrequency: 'daily' as const,
     priority: 0.8,

@@ -1,43 +1,20 @@
 
-import type { ReactNode } from 'react';
-import { CarFront, Users } from "lucide-react";
-import {
-  BoxingGloveIcon,
-  MmaGlovesIcon,
-  TennisRacketIcon,
-  CustomBaseballIcon,
-  CustomBasketballIcon,
-  CustomAmericanFootballIcon,
-  CustomFutbolIcon,
-  CustomHockeyIcon
-} from "@/components/icons/custom-icons";
-import type { SportCategory as SportCategoryType } from '@/types'; // Import SportCategory type
+// This file now re-exports data from sports-data.tsx to ensure a single source of truth.
+// All primary data, including icons and SEO fields, is managed in sports-data.tsx.
 
-export interface SportLeagueOption {
-  sport: string;
-  league: string;
-  name: string;
-}
+export { 
+    sportCategories, 
+    SPORT_LEAGUE_OPTIONS_FULL, 
+    getCategoryDetails 
+} from './sports-data.tsx';
 
-export const SPORT_LEAGUE_OPTIONS_FULL: SportLeagueOption[] = [
-  { sport: "football", league: "nfl", name: "NFL (American Football)" },
-  { sport: "basketball", league: "nba", name: "NBA (Basketball)" },
-  { sport: "hockey", league: "nhl", name: "NHL (Hockey)" },
-  { sport: "baseball", league: "mlb", name: "MLB (Baseball)" },
-  { sport: "soccer", league: "usa.1", name: "MLS (Soccer USA)" },
-  { sport: "soccer", league: "eng.1", name: "Premier League (Soccer ENG)" },
-  { sport: "soccer", league: "esp.1", name: "La Liga (Soccer ESP)" },
-];
+export type { 
+    SportLeagueOption, 
+    CategoryDetails 
+} from './sports-data.tsx';
 
-export const sportCategories: SportCategoryType[] = [
-  { id: "soccer", name: "Soccer", icon: <CustomFutbolIcon style={{ width: 36, height: 36 }} /> },
-  { id: "basketball", name: "Basketball", icon: <CustomBasketballIcon style={{ width: 36, height: 36 }} /> },
-  { id: "american-football", name: "NFL", icon: <CustomAmericanFootballIcon style={{ width: 36, height: 36 }} /> },
-  { id: "baseball", name: "MLB", icon: <CustomBaseballIcon style={{ width: 36, height: 36 }} /> },
-  { id: "hockey", name: "NHL", icon: <CustomHockeyIcon style={{ width: 36, height: 36 }} /> },
-  { id: "boxing", name: "Boxing", icon: <BoxingGloveIcon style={{ width: 36, height: 36 }} /> },
-  { id: "mma-ufc", name: "MMA/UFC", icon: <MmaGlovesIcon style={{ width: 36, height: 36 }} /> },
-  { id: "tennis", name: "Tennis", icon: <TennisRacketIcon style={{ width: 36, height: 36 }} /> },
-  { id: "motor-sports", name: "Motor Sports", icon: <CarFront size={36} /> },
-  { id: "wrestling-wwe", name: "Wrestling/WWE", icon: <Users size={36} /> },
-];
+// The SportCategoryType is defined in types/index.ts and used by sports-data.tsx
+// If you need to import it here for some reason, ensure it's from the original source.
+// For example: import type { SportCategory as SportCategoryType } from '@/types';
+// However, it's better if types are consistently imported where they are used.
+// Since this file only re-exports, direct type imports for its own logic are minimal.

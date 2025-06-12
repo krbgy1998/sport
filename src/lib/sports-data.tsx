@@ -1,6 +1,10 @@
 
 import type { ReactNode } from 'react';
-import { CarFront, Users, Dices, Swords, Trophy, Bot } from "lucide-react"; // Added Dices, Swords, Trophy, Bot for placeholders
+import Image from 'next/image'; // Import next/image
+// Lucide icons still used for some categories if not overridden by images
+import { CarFront, Users } from 'lucide-react';
+
+// Custom SVG Icons (some might be replaced by images below)
 import {
   BoxingGloveIcon,
   MmaGlovesIcon,
@@ -9,7 +13,8 @@ import {
   CustomBasketballIcon,
   CustomAmericanFootballIcon,
   CustomFutbolIcon,
-  CustomHockeyIcon
+  CustomHockeyIcon,
+  CustomGolfIcon,
 } from "@/components/icons/custom-icons";
 import type { SportCategory as SportCategoryType } from '@/types';
 
@@ -36,7 +41,7 @@ export const getCategoryDetails = (categoryId: string, categories: SportCategory
   switch (categoryId) {
     case 'tennis':
       isTennis = true;
-      espnSportKey = 'tennis'; // Still useful for some logic, or could be purely flag-based
+      espnSportKey = 'tennis';
       break;
     case 'american-football':
       espnSportKey = 'football';
@@ -55,7 +60,6 @@ export const getCategoryDetails = (categoryId: string, categories: SportCategory
     // 'baseball' maps to 'baseball'
     // 'hockey' maps to 'hockey'
     // 'boxing' - no specific ESPN sport key for general boxing scoreboards in the same format.
-    // Add more mappings as needed
   }
 
   return {
@@ -270,7 +274,7 @@ export const sportCategories: SportCategoryType[] = [
   {
     id: "soccer",
     name: "Soccer",
-    icon: <CustomFutbolIcon style={{ width: 36, height: 36 }} />,
+    icon: <Image src="https://iili.io/FKnx02n.webp" alt="Soccer icon" width={36} height={36} />,
     pageTitle: "Live Soccer Scores, Fixtures & Results | sportsurge",
     metaDescription: "Get the latest live soccer scores, fixtures, results, and news from leagues worldwide. Follow your favorite football teams and competitions on sportsurge.",
     onPageContent: "Explore the world of soccer with sportsurge. We bring you real-time scores, match schedules, and detailed results from major leagues and tournaments including the Premier League, La Liga, Serie A, Bundesliga, MLS, Champions League, World Cup, and many more. Stay updated with every goal, assist, and key moment in the beautiful game."
@@ -278,7 +282,7 @@ export const sportCategories: SportCategoryType[] = [
   {
     id: "basketball",
     name: "Basketball",
-    icon: <CustomBasketballIcon style={{ width: 36, height: 36 }} />,
+    icon: <Image src="https://iili.io/FKnxXQ2.webp" alt="Basketball icon" width={36} height={36} />,
     pageTitle: "Live Basketball Scores & News (NBA, College) | sportsurge",
     metaDescription: "Follow live basketball scores, NBA results, college basketball updates, and WNBA action. sportsurge is your source for all things basketball.",
     onPageContent: "Dive into the excitement of basketball with sportsurge. Get live scores, game highlights, and updates from the NBA, Men's College Basketball (NCAAM), WNBA, and other major basketball leagues. Track your favorite teams and players throughout the season."
@@ -286,7 +290,7 @@ export const sportCategories: SportCategoryType[] = [
   {
     id: "american-football",
     name: "NFL",
-    icon: <CustomAmericanFootballIcon style={{ width: 36, height: 36 }} />,
+    icon: <Image src="https://iili.io/FKnxWhl.webp" alt="NFL icon" width={36} height={36} />,
     pageTitle: "Live NFL & College Football Scores | sportsurge",
     metaDescription: "Get real-time NFL scores, college football (NCAAF) results, game schedules, and news. sportsurge covers all the American Football action.",
     onPageContent: "Experience the thrill of American Football with sportsurge. We provide live scores, game summaries, and team news for the NFL and NCAA College Football (NCAAF). Follow every touchdown, field goal, and crucial play."
@@ -294,7 +298,7 @@ export const sportCategories: SportCategoryType[] = [
   {
     id: "baseball",
     name: "MLB",
-    icon: <CustomBaseballIcon style={{ width: 36, height: 36 }} />,
+    icon: <Image src="https://iili.io/FKnxVI4.webp" alt="MLB icon" width={36} height={36} />,
     pageTitle: "Live MLB Baseball Scores & Schedules | sportsurge",
     metaDescription: "Stay updated with live MLB scores, game results, schedules, and baseball news. sportsurge brings you comprehensive coverage of Major League Baseball.",
     onPageContent: "Follow Major League Baseball with sportsurge. Get live scores, detailed game information, schedules, and the latest news from the MLB. Don't miss a single home run or strikeout!"
@@ -302,7 +306,7 @@ export const sportCategories: SportCategoryType[] = [
   {
     id: "hockey",
     name: "NHL",
-    icon: <CustomHockeyIcon style={{ width: 36, height: 36 }} />,
+    icon: <Image src="https://iili.io/FKnxYBI.webp" alt="NHL icon" width={36} height={36} />,
     pageTitle: "Live NHL Hockey Scores & Game Updates | sportsurge",
     metaDescription: "Get live NHL scores, game schedules, results, and hockey news. sportsurge covers all the action from the National Hockey League.",
     onPageContent: "Catch all the National Hockey League action with sportsurge. We deliver live scores, game updates, schedules, and news from the NHL. Follow your favorite teams as they battle on the ice."
@@ -310,7 +314,7 @@ export const sportCategories: SportCategoryType[] = [
   {
     id: "motor-sports",
     name: "Motor Sports",
-    icon: <CarFront size={36} />,
+    icon: <Image src="https://iili.io/FKnxa1t.webp" alt="Motor Sports icon" width={36} height={36} />,
     pageTitle: "Live Motor Sports Results (F1, IndyCar) | sportsurge",
     metaDescription: "Follow live Formula 1 (F1) and IndyCar Series results, race schedules, and news. sportsurge keeps you updated on the world of motor racing.",
     onPageContent: "Fuel your passion for speed with sportsurge's Motor Sports coverage. Get live updates, race results, and schedules for Formula 1 (F1) and the IndyCar Series. Stay ahead of every lap and checkered flag."
@@ -318,7 +322,7 @@ export const sportCategories: SportCategoryType[] = [
   {
     id: "golf",
     name: "Golf",
-    icon: <Trophy size={36} />,
+    icon: <Image src="https://iili.io/FKnxcrX.webp" alt="Golf icon" width={36} height={36} />,
     pageTitle: "Live Golf Scores & Tournament Updates (PGA, LPGA, LIV) | sportsurge",
     metaDescription: "Get live golf scores from PGA Tour, LPGA Tour, PGA Champions Tour, and LIV Golf. Follow tournaments, leaderboards, and player updates on sportsurge.",
     onPageContent: "Follow the links with sportsurge. We provide live golf scores, tournament leaderboards, and updates from the PGA Tour, LPGA Tour, PGA Champions Tour, and LIV Golf. Track your favorite golfers and major championships."
@@ -326,7 +330,7 @@ export const sportCategories: SportCategoryType[] = [
   {
     id: "mma-ufc",
     name: "MMA",
-    icon: <MmaGlovesIcon style={{ width: 36, height: 36 }} />,
+    icon: <Image src="https://iili.io/FKnlXZF.webp" alt="MMA icon" width={36} height={36} />,
     pageTitle: "Live MMA Fight Results (UFC, PFL) | sportsurge",
     metaDescription: "Get live MMA fight results, event schedules, and news from UFC and PFL. sportsurge brings you cage-side action for Mixed Martial Arts.",
     onPageContent: "Step into the octagon with sportsurge's MMA coverage. Get live fight results, event schedules, and news from top promotions like UFC and PFL. Follow every knockout and submission in the world of Mixed Martial Arts."
@@ -334,7 +338,7 @@ export const sportCategories: SportCategoryType[] = [
   {
     id: "tennis",
     name: "Tennis",
-    icon: <TennisRacketIcon style={{ width: 36, height: 36 }} />,
+    icon: <Image src="https://iili.io/FKnEEv4.webp" alt="Tennis icon" width={36} height={36} />,
     pageTitle: "Live Tennis Scores & Tournament Results | sportsurge",
     metaDescription: "Follow live tennis scores, ATP & WTA tournament results, match schedules, and player news. sportsurge serves up all the action from the world of tennis.",
     onPageContent: "Catch every serve and volley with sportsurge's tennis coverage. We bring you live scores, match results, and tournament updates from ATP, WTA, and Grand Slam events. Follow your favorite tennis stars and never miss a point."
@@ -342,12 +346,22 @@ export const sportCategories: SportCategoryType[] = [
   {
     id: "boxing",
     name: "Boxing",
-    icon: <BoxingGloveIcon style={{ width: 36, height: 36 }} />,
+    icon: <Image src="https://iili.io/FKnWHMP.webp" alt="Boxing icon" width={36} height={36} />,
     pageTitle: "Live Boxing Fight Night Results & News | sportsurge",
     metaDescription: "Get live boxing results, fight schedules, and news. sportsurge covers major boxing events and championship bouts.",
     onPageContent: "Experience the sweet science with sportsurge's boxing coverage. Get live fight results, upcoming bout schedules, and news from the world of boxing."
   },
+  {
+    id: "wrestling-wwe",
+    name: "WWE",
+    icon: <Image src="https://iili.io/FKnjul1.webp" alt="WWE icon" width={36} height={36} />,
+    pageTitle: "Live WWE Updates & News | sportsurge",
+    metaDescription: "Follow the latest updates from the world of professional wrestling and WWE. sportsurge brings you the action.",
+    onPageContent: "Get your wrestling fix with sportsurge. We cover major events and news from the world of professional wrestling, including WWE. Stay tuned for all the drama and athleticism."
+  },
 ];
 
 
+    
 
+    

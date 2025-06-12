@@ -1,23 +1,21 @@
 
 import type { Metadata, ResolvingMetadata } from 'next';
-import { sportCategories as allSportCategoriesDetails, getCategoryDetails, CategoryDetails } from '@/lib/sports-data.tsx'; // Use .tsx for detailed data
+import { sportCategories as allSportCategoriesDetails, getCategoryDetails, CategoryDetails } from '@/lib/sports-data.tsx';
 import CategoryClientContent from '@/components/category/category-client-content';
 import { generateCategoryContent } from '@/ai/flows/generate-category-content';
 
-type Props = {
-  params: { categoryId: string };
-};
+const CURRENT_CATEGORY_ID = "basketball";
 
 export async function generateMetadata(
-  { params }: Props,
+  _: unknown, // Placeholder for params
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const categoryId = params.categoryId;
+  const categoryId = CURRENT_CATEGORY_ID;
   const categoryDetails = getCategoryDetails(categoryId, allSportCategoriesDetails);
 
   if (!categoryDetails) {
     return {
-      title: 'Category Not Found', // Will be combined with template from layout
+      title: 'Category Not Found',
       description: 'The sports category you are looking for does not exist on sportsurge.',
       openGraph: {
         title: 'Category Not Found | sportsurge',
@@ -31,22 +29,17 @@ export async function generateMetadata(
   }
 
   const categoryName = categoryDetails.name;
-  // New title format
   const newPageTitle = `Sportsurge ${categoryName} - Live ${categoryName} Matches, Fixtures & Results`;
-
   const metaDescription = categoryDetails.metaDescription || `Get live ${categoryName.toLowerCase()} scores, latest news, schedules, and in-depth updates on sportsurge. Your premier source for all ${categoryName.toLowerCase()} action.`;
-  const canonicalUrlPath = `/category/${categoryId}`;
-  
+  const canonicalUrlPath = `/${categoryId}`;
   const ogImageUrl = `https://placehold.co/1200x630.png`; 
-
   const baseKeywords = ['live scores', 'results', 'news', 'schedule', 'updates', 'sportsurge', 'matches', 'fixtures'];
   const categoryKeywords = categoryName.toLowerCase().split(' ').map(k => `${categoryName} ${k}`);
   const keywords = [categoryName, ...baseKeywords, ...categoryKeywords];
 
-
   return {
     title: {
-      absolute: newPageTitle, // Use absolute to override layout template
+      absolute: newPageTitle,
     },
     description: metaDescription,
     keywords: keywords,
@@ -54,7 +47,7 @@ export async function generateMetadata(
       canonical: canonicalUrlPath, 
     },
     openGraph: {
-      title: newPageTitle, // Use the new page title for OG
+      title: newPageTitle,
       description: metaDescription,
       url: canonicalUrlPath, 
       siteName: 'sportsurge',
@@ -71,17 +64,17 @@ export async function generateMetadata(
     },
     twitter: {
       card: 'summary_large_image',
-      title: newPageTitle, // Use the new page title for Twitter
+      title: newPageTitle,
       description: metaDescription,
       images: [ogImageUrl],
     },
   };
 }
 
-export default async function CategoryPage({ params }: Props) {
-  const categoryId = params.categoryId;
+export default async function BasketballPage() {
+  const categoryId = CURRENT_CATEGORY_ID;
   const categoryDetails = getCategoryDetails(categoryId, allSportCategoriesDetails);
-  
+
   let description = categoryDetails?.onPageContent || null;
   if (categoryDetails?.name) {
     try {
@@ -91,9 +84,8 @@ export default async function CategoryPage({ params }: Props) {
       }
     } catch (error) {
       console.error(`Failed to generate AI content for ${categoryDetails.name} on server:`, error);
-      // Fallback to static description is already handled by 'description' initial value
     }
   }
-
+  
   return <CategoryClientContent categoryDetails={categoryDetails} initialDescription={description} />;
 }

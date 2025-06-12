@@ -29,9 +29,8 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
         setDisplayTime(dateObj.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true }));
         setDisplayDate(dateObj.toLocaleDateString([], { month: 'short', day: 'numeric' }));
         
-        // Ensure league information is available before checking slug
         if (eventData.type === 'espn' && eventData.data.league && eventData.data.sportType === 'football' && eventData.data.league.slug === 'nfl') {
-            setNflEstTime(dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }));
+            setNflEstTime(dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true, timeZoneName: 'short' }).split(' ')[1] === 'ET' || dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true, timeZoneName: 'short' }).includes('EDT') || dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true, timeZoneName: 'short' }).includes('EST') ? dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : dateObj.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'America/New_York' }) + ' ET');
         } else {
             setNflEstTime(null); 
         }
@@ -58,6 +57,21 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
     return false;
   }, [eventData]);
 
+  const isTennisLive = useMemo(() => {
+    if (eventData.type === 'tennis') {
+      const status = eventData.data.status?.toLowerCase();
+      return status === 'in' || status?.includes('progress') || status?.includes('live');
+    }
+    return false;
+  }, [eventData]);
+
+  const isEspnLive = useMemo(() => {
+    if (eventData.type === 'espn') {
+      return eventData.data.event.status.type.state === 'in';
+    }
+    return false;
+  }, [eventData]);
+
   const matchUrl = useMemo(() => {
     if (eventData.type === 'tennis') {
       const { competitors, name: eventName } = eventData.data;
@@ -72,13 +86,13 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
         case 'racing':
         case 'mma':
         case 'golf':
-        case 'football': // NFL also uses shortName for URL
-          return `https://v3.sportsurge.uno/#${event.shortName.replace(/\s+/g, '%20')}`;
+        case 'football': 
+          return `https://v3.sportsurge.uno/#${event.name.replace(/\s+/g, '%20')}`;
         default: 
           if (homeTeam?.team && awayTeam?.team) {
             return `https://v3.sportsurge.uno/#${homeTeam.team.shortDisplayName} vs ${awayTeam.team.shortDisplayName}`;
           }
-          return `https://v3.sportsurge.uno/#${event.shortName.replace(/\s+/g, '%20')}`;
+          return `https://v3.sportsurge.uno/#${event.name.length < 50 ? event.name.replace(/\s+/g, '%20') : event.shortName.replace(/\s+/g, '%20')}`;
       }
     }
     return 'https://v3.sportsurge.uno/';
@@ -91,8 +105,6 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
     window.open(matchUrl, '_blank');
   };
 
-  const isEspnEvent = eventData.type === 'espn';
-  const isEspnLive = isEspnEvent && eventData.data.event.status.type.state === 'in';
 
   if (eventData.type === 'tennis') {
     const tennisEvent = eventData.data;
@@ -104,7 +116,7 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
 
     const renderTennisStatus = () => {
       const lowerStatus = eventStatus?.toLowerCase();
-      if (lowerStatus?.includes("progress") || lowerStatus?.includes("live") || lowerStatus === "in") {
+      if (isTennisLive) {
         return <span className="text-sm text-destructive font-semibold animate-pulse">LIVE</span>;
       }
       if (lowerStatus?.includes("scheduled") || lowerStatus === "pre") {
@@ -120,7 +132,14 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
       return (
         <Card className={cn(
           "shadow-md flex flex-col h-full text-card-foreground",
-           isEventEnded ? "opacity-70 bg-card" : "bg-card hover:shadow-lg" 
+           isEventEnded 
+            ? "opacity-70 bg-card" 
+            : [
+                "cursor-pointer",
+                isTennisLive 
+                  ? "bg-destructive/10 border-2 border-destructive shadow-lg" 
+                  : "bg-card hover:shadow-lg"
+              ]
         )}>
           <CardHeader className="p-3">
             <div className="flex justify-between items-center mb-1">
@@ -145,7 +164,12 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
           "shadow-md flex flex-col h-full text-card-foreground",
           isEventEnded 
             ? "opacity-70 bg-card" 
-            : "bg-card hover:shadow-lg cursor-pointer"
+            : [
+                "cursor-pointer",
+                isTennisLive 
+                  ? "bg-destructive/10 border-2 border-destructive shadow-lg" 
+                  : "bg-card hover:shadow-lg"
+              ]
         )}
         onClick={handleCardClick}
       >
@@ -164,12 +188,12 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
       </Card>
     );
 
-  } else if (isEspnEvent) {
+  } else if (eventData.type === 'espn') {
     const { event, league, sportType } = eventData.data;
     const competition = event.competitions[0];
     const status = competition.status;
 
-    const renderEspnStatus = () => { // For Card Header
+    const renderEspnStatus = () => { 
         let liveText = "LIVE";
         if (status.type.state === "in") {
           if (sportType !== 'mma') { 
@@ -177,13 +201,13 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
             if (status.period > 0) liveText += ` P${status.period}`;
           }
           if (status.type.description === "Halftime") liveText = "Halftime";
-          return <span className="text-sm text-accent font-semibold animate-pulse">{liveText}</span>;
+          return <span className="text-sm text-destructive font-semibold animate-pulse">{liveText}</span>;
         }
         if (status.type.state === "pre") {
-           if (sportType === 'football' && league.slug === 'nfl') { // NFL pre-game header uses shortDetail
+           if (sportType === 'football' && league.slug === 'nfl') { 
              return <span className="text-sm text-muted-foreground">{status.type.shortDetail}</span>;
            }
-          return <span className="text-sm text-muted-foreground">{displayTime || 'Scheduled'}</span>;
+          return <span className="text-sm text-muted-foreground">{displayTime || status.type.shortDetail || 'Scheduled'}</span>;
         }
         if (status.type.state === "post") {
           return <span className="text-sm text-muted-foreground font-semibold">Final</span>;
@@ -195,7 +219,7 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
     const awayTeam = sportType !== 'racing' && sportType !== 'golf' && sportType !== 'mma' ? competition.competitors.find(c => c.homeAway === 'away') : undefined;
     const getScore = (team?: any) => team?.score ?? '0';
     
-    const eventName = event.shortName;
+    const eventNameToDisplay = event.name.replace(/ at /gi, " vs ");
     const eventDateForIndividualSports = competition.date; 
     const circuit = competition.circuit || event.circuit; 
 
@@ -213,7 +237,7 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
                 <Image src={homeTeam.team.logo} alt={`${homeTeam.team.displayName} logo`} width={32} height={32} className="mb-1 h-8 w-8 object-contain"/>
               )}
               <span className="font-medium text-xs truncate w-full">{homeTeam.team?.displayName}</span>
-              {status.type.state === "in" && <span className="text-lg font-bold text-primary">{getScore(homeTeam)}</span>}
+              {(status.type.state === "in" || status.type.state === "post") && <span className="text-lg font-bold text-primary">{getScore(homeTeam)}</span>}
             </div>
             
             <div className="text-muted-foreground text-lg font-light">vs</div>
@@ -223,22 +247,19 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
                 <Image src={awayTeam.team.logo} alt={`${awayTeam.team.displayName} logo`} width={32} height={32} className="mb-1 h-8 w-8 object-contain"/>
               )}
               <span className="font-medium text-xs truncate w-full">{awayTeam.team?.displayName}</span>
-               {status.type.state === "in" && <span className="text-lg font-bold text-primary">{getScore(awayTeam)}</span>}
+               {(status.type.state === "in" || status.type.state === "post") && <span className="text-lg font-bold text-primary">{getScore(awayTeam)}</span>}
             </div>
           </div>
           {(isNfl || isNcaaf) && (
             <div className="text-xs text-muted-foreground mt-1">
-              {isNfl && (
-                <>
-                  {status.type.state === 'pre' && (
-                    <span>
-                      {displayDate && nflEstTime ? `${displayDate} - ${nflEstTime}${event.week?.number ? ` - WEEK ${event.week.number}` : ''}` : (event.week?.number ? `WEEK ${event.week.number}`: status.type.shortDetail)}
-                    </span>
-                  )}
-                  {status.type.state === 'in' && event.week?.number && (
-                    <span>WEEK {event.week.number}</span>
-                  )}
-                </>
+              {isNfl && status.type.state === 'pre' && (
+                <span>
+                  {(displayDate && nflEstTime) ? `${displayDate} - ${nflEstTime}` : (status.type.shortDetail || '')}
+                  {event.week?.number ? ` - WEEK ${event.week.number}` : ''}
+                </span>
+              )}
+              {isNfl && status.type.state === 'in' && event.week?.number && (
+                  <span>WEEK {event.week.number}</span>
               )}
               {isNcaaf && status.type.state === 'pre' && status.type.shortDetail && (
                 <span>{status.type.shortDetail}</span>
@@ -253,14 +274,12 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
       if (sportType === 'mma') {
         let mmaStatusElement: React.ReactNode = null;
         if (status.type.state === "in") {
-          mmaStatusElement = <p className="text-sm text-accent font-semibold animate-pulse">LIVE NOW!</p>;
+          mmaStatusElement = <p className="text-sm text-destructive font-semibold animate-pulse">LIVE NOW!</p>;
         } else if (status.type.state === "post") {
           mmaStatusElement = <p className="text-sm text-muted-foreground font-semibold">FINISHED!</p>;
         } else if (status.type.state === "pre" && eventDateStr) {
           const dateObj = new Date(eventDateStr);
-          // Get time in HH:MM AM/PM format
           const timeStr = dateObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-          // Get date in YYYY-MM-DD format
           const year = dateObj.getFullYear();
           const month = String(dateObj.getMonth() + 1).padStart(2, '0');
           const day = String(dateObj.getDate()).padStart(2, '0');
@@ -294,7 +313,7 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
              </div>
            )}
            {status.type.state === "in" && (sportType === 'racing' || sportType === 'golf') && (
-              <p className="text-sm text-accent font-semibold animate-pulse">{status.type.detail || "LIVE"}</p>
+              <p className="text-sm text-destructive font-semibold animate-pulse">{status.type.detail || "LIVE"}</p>
            )}
            {status.type.state === "post" && (sportType === 'racing' || sportType === 'golf') && (
               <p className="text-sm text-muted-foreground font-semibold">{status.type.shortDetail || "Finished"}</p>
@@ -304,14 +323,16 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
     };
 
     return (
-      <Card 
+      <Card
         className={cn(
-          "shadow-md flex flex-col h-full text-card-foreground",
+          "flex flex-col h-full text-card-foreground", 
           isEventEnded
-            ? "opacity-70 bg-card"
-            : [
-                "hover:shadow-lg cursor-pointer",
-                isEspnLive ? "bg-accent/10" : "bg-card"
+            ? "opacity-70 bg-card shadow-md" 
+            : [ 
+                "cursor-pointer", 
+                isEspnLive
+                  ? "bg-destructive/10 border-2 border-destructive shadow-lg" 
+                  : "bg-card shadow-md hover:shadow-lg" 
               ]
         )}
         onClick={handleCardClick}
@@ -321,8 +342,8 @@ export function EspnScoreCard({ eventData }: EspnScoreCardProps) {
             <Badge variant="secondary" className="text-xs">{league.abbreviation}</Badge>
             {renderEspnStatus()}
           </div>
-          <CardTitle className="text-base font-semibold text-center truncate leading-tight" title={eventName}>
-            {eventName}
+          <CardTitle className="text-base font-semibold text-center truncate leading-tight" title={eventNameToDisplay}>
+            {eventNameToDisplay}
           </CardTitle>
         </CardHeader>
         <CardContent className="p-3 pt-0 flex-grow flex flex-col justify-center">

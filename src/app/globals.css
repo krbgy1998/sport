@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,75 +6,75 @@
 @layer base {
   :root {
     --background: 0 0% 100%; /* White */
-    --foreground: 240 10% 3.9%; /* Dark Gray */
+    --foreground: 220 10% 10%; /* Very Dark Blue/Gray */
 
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card: 0 0% 98%; /* Off-white */
+    --card-foreground: 220 10% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
+    --popover: 0 0% 96%;
+    --popover-foreground: 220 10% 15%;
 
-    --primary: 20 100% 63%; /* #FF8040 */
-    --primary-foreground: 20 85% 5%; /* Dark, for contrast on orange */
+    --primary: 210 100% 50%; /* #007FFF - Vibrant Blue */
+    --primary-foreground: 0 0% 100%; /* White */
 
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 240 10% 3.9%;
+    --secondary: 220 10% 94%; /* Very Light Gray */
+    --secondary-foreground: 220 10% 30%;
 
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
+    --muted: 220 10% 90%;
+    --muted-foreground: 220 10% 45%;
 
-    --accent: 15 100% 50%; /* #FF4000 */
-    --accent-foreground: 0 0% 98%; /* White, for contrast on red-orange */
+    --accent: 30 100% 47%; /* #F07000 - Bright Orange */
+    --accent-foreground: 0 0% 100%; /* White */
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 20 100% 58%; /* Slightly darker primary for focus rings */
+    --border: 220 10% 88%; /* Light Gray Border */
+    --input: 220 10% 85%;
+    --ring: 210 100% 50%; /* Matches Primary Blue */
     --radius: 0.5rem;
 
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --chart-1: 210 90% 55%;
+    --chart-2: 190 80% 50%;
+    --chart-3: 170 70% 45%;
+    --chart-4: 35 100% 55%;
+    --chart-5: 230 70% 60%;
   }
 
   .dark {
-    --background: 240 4% 16%; /* #26262b */
-    --foreground: 0 0% 98%; /* Light Gray / White */
+    --background: 220 15% 12%; /* Deep Dark Blue/Gray */
+    --foreground: 210 20% 96%; /* Very Light Gray */
 
-    --card: 240 4% 20%; /* Slightly lighter than background */
-    --card-foreground: 0 0% 95%;
+    --card: 220 15% 18%; /* Subtly Lighter Dark Blue/Gray */
+    --card-foreground: 210 20% 92%;
 
-    --popover: 240 4% 20%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 220 15% 15%;
+    --popover-foreground: 210 20% 94%;
 
-    --primary: 20 100% 63%; /* #FF8040 */
-    --primary-foreground: 20 85% 5%; /* Dark, for contrast on orange */
+    --primary: 210 100% 56%; /* #1989FF - Vibrant Blue */
+    --primary-foreground: 210 40% 98%; /* Almost White */
     
-    --secondary: 240 4% 25%;
-    --secondary-foreground: 0 0% 90%;
+    --secondary: 220 15% 25%;
+    --secondary-foreground: 210 20% 80%;
 
-    --muted: 240 4% 22%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 220 15% 22%;
+    --muted-foreground: 210 15% 65%;
 
-    --accent: 15 100% 50%; /* #FF4000 */
-    --accent-foreground: 0 0% 100%; /* White */
+    --accent: 30 100% 50%; /* #FF8000 - Sporty Orange */
+    --accent-foreground: 30 100% 10%; /* Very Dark Brown/Black */
     
     --destructive: 0 70% 55%; /* Standard Red */
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 4% 28%;
-    --input: 240 4% 28%;
-    --ring: 20 100% 58%; /* Slightly darker primary for focus rings */
+    --border: 220 15% 25%;
+    --input: 220 15% 28%;
+    --ring: 210 100% 56%; /* Matches Primary Blue */
 
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --chart-1: 210 80% 60%;
+    --chart-2: 190 70% 55%;
+    --chart-3: 170 60% 50%;
+    --chart-4: 40 90% 60%;
+    --chart-5: 230 60% 65%;
   }
 }
 

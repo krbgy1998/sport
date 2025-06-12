@@ -37,6 +37,7 @@ Your task is to generate a rich, engaging, and SEO-friendly description for the 
 
 Instructions:
 - The description should be suitable for display on the sportsurge website.
+- The description must be **unique and original** for the sports category '{{{categoryName}}}', providing specific insights rather than generic statements.
 - Highlight the excitement, key aspects, and common leagues/tournaments associated with {{{categoryName}}}.
 - Incorporate relevant keywords naturally. For example:
     - If {{{categoryName}}} is "Soccer", mention terms like 'live soccer scores', 'football results', 'Premier League', 'Champions League', 'World Cup', 'goals', 'matches', 'teams', 'latest soccer action', 'football updates'.
@@ -45,7 +46,9 @@ Instructions:
     - If {{{categoryName}}} is "Basketball", mention 'live basketball scores', 'NBA action', 'college hoops', 'three-pointers', 'slam dunks', 'court battles', 'final buzzer'.
 - The tone should be enthusiastic and informative.
 - The output should be a single block of text, approximately 2-3 paragraphs long.
+- Use varied sentence structures to ensure readability and engagement.
 - Ensure the content explicitly mentions "sportsurge" as the go-to source for information related to {{{categoryName}}}.
+- Conclude by reinforcing why sportsurge is the premier destination for '{{{categoryName}}}' enthusiasts and invite users to explore further.
 - Focus on providing value to the reader and search engines.
 `,
 });
@@ -64,3 +67,4 @@ const generateCategoryContentFlow = ai.defineFlow(
     return output;
   }
 );
+
